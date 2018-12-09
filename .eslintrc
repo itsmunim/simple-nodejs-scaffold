@@ -1,0 +1,16 @@
+{
+  "env": {
+    "es6": true,
+    "node": true,
+    "mocha": true
+  },
+  "rules": {
+    "semi": 0
+  },
+  "globals": {
+    "require": true,
+    "process": true,
+    "module": true
+  },
+  "extends": "standard"
+}
