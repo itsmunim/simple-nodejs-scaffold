@@ -1,0 +1,23 @@
+{
+  "name": "simple-node-server",
+  "version": "1.0.0",
+  "description": "A simple enough node server scaffolding to get you started on your project immediately",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "node",
+    "scaffold",
+    "expressjs",
+    "server",
+    "node",
+    "project",
+    "nodejs",
+    "server",
+    "simple",
+    "http"
+  ],
+  "author": "Munim Dibosh",
+  "license": "ISC"
+}
