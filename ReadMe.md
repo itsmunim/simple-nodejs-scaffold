@@ -74,7 +74,7 @@ server <-- root folder for all functionalities
       | - <type>.test.js <-- tests for this resource; type can be model, repository, controller
       etc. For each there should be one separate test file
       
-| - test <-- test specific helpers, shared mocks, global vars should be here
+| - testHelpers <-- test specific helpers, shared mocks, global vars should be here
   | - ...    
 ```
 
