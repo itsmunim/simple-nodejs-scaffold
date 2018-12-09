@@ -8,4 +8,3 @@ const user = require('./user');
 router.use('/user', user.route);
 
 module.exports = router;
-

@@ -31,5 +31,3 @@ let server = app.listen(port, function () {
 
 // Manage graceful shutdown and proper logging
 shutDownManager.manage(server);
-
-

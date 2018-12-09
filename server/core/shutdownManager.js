@@ -40,7 +40,9 @@ function manage(server) {
     connections.push(connection);
     logger.log('%s connections currently open', connections.length);
     connection.on('close', function () {
-      connections = connections.filter((curr) => { return curr !== connection; });
+      connections = connections.filter((curr) => {
+        return curr !== connection;
+      });
     });
   });
 }

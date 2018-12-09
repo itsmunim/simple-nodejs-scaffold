@@ -8,7 +8,8 @@
   },
   "scripts": {
     "start": "DEBUG=simpleNodeServer node index.js",
-    "test": "mocha -r server/test/globals.js server/**/*.test.js"
+    "test": "mocha -r server/test/globals.js server/**/*.test.js",
+    "lint": "eslint server/"
   },
   "keywords": [
     "node",
