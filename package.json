@@ -4,6 +4,7 @@
   "description": "A simple enough node server scaffolding to get you started on your project immediately",
   "main": "index.js",
   "scripts": {
+    "start": "DEBUG=simpleNodeServer node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
