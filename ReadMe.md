@@ -50,11 +50,11 @@ INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> 
 #### The Structure
 
 ``` 
-server
-
+index.js <-- entry point for node
+server <-- root folder for all functionalities
 | - core <-- all the core functionalities belong here 
   | - shutdownManager.js 
-  | - bootstrapper.js <-- api.index gets hooked up with app here
+  | - bootstrapper.js
   | - ...
   
 | - config <-- all server specific config resides here
