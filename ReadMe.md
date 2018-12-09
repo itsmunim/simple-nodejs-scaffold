@@ -1,9 +1,9 @@
-##### Simple Node Server
+### Simple Node Server
 
 A simple enough node server scaffolding to get you started on your project immediately
 
 
-###### Features
+#### Features
 
 - Don't worry about the boilerplate anymore, jump right into writing your API
 resources
@@ -15,7 +15,7 @@ resources
 - Structure your code in more maintainable and industry standard way
 
 
-###### Running the Project
+#### Running the Project
 
 - `npm install`
 
@@ -23,7 +23,7 @@ resources
 
 - To run in different port: `PORT=8000 npm start`
 
-###### Serving a Client/Frontend 
+#### Serving a Client/Frontend 
 
 - If your client app has following structure
 
@@ -47,7 +47,7 @@ INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> 
 ```
 
 
-###### The Structure
+#### The Structure
 
 ``` 
 server
@@ -78,7 +78,7 @@ server
   | - ...    
 ```
 
-###### Exposing a new API Resource
+#### Exposing a new API Resource
 
 - Create the resource folder under `server/api` (e.g. `user`)
 
