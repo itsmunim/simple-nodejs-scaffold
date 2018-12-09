@@ -118,3 +118,10 @@ module.exports = router;
 
 - To know more, please take a look at the given sample api resource `user`
 
+
+#### Other Important Commands
+
+- To run tests: `npm run test`
+
+- To check for lint errors: `npm run lint`
+
