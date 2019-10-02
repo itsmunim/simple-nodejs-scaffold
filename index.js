@@ -1,8 +1,12 @@
-const bootstrapper = require('./server/core/bootstrapper');
-const shutDownManager = require('./server/core/shutdownManager');
-const logger = require('./server/core/logger');
-const config = require('./server/config');
-const apiRoute = require('./server/api');
+// start - initialize module aliases
+require('module-alias/register');
+// end - initialize module aliases
+
+const bootstrapper = require('@core/bootstrapper');
+const shutDownManager = require('@core/shutdownManager');
+const logger = require('@core/logger');
+const config = require('@config');
+const apiRoute = require('@api');
 
 function _bootstrap_() {
   let frontEndDir = process.env.CLIENT_DIR || null;

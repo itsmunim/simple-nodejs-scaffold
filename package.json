@@ -6,6 +6,12 @@
   "engines": {
     "node": ">=10.13.0"
   },
+  "_moduleAliases": {
+    "@root": "server",
+    "@core": "server/core",
+    "@api": "server/api",
+    "@config": "server/config"
+  },
   "scripts": {
     "start": "DEBUG=simpleNodeServer node index.js",
     "test": "mocha -r server/testHelpers/globals.js server/**/*.test.js",
@@ -40,6 +46,7 @@
     "eslint-plugin-node": "^8.0.0",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "module-alias": "^2.2.2"
   }
 }
