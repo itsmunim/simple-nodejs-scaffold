@@ -1,4 +1,4 @@
-const logger = require('./logger');
+const logger = require('@core/logger');
 
 /**
  * A basic shutdown manager for the node backend. In case of any emergencies,

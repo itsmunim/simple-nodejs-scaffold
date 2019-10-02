@@ -3,14 +3,14 @@ const cors = require('cors');
 const express = require('express');
 const path = require('path');
 
-const commonErrorHandler = require('./commonErrorHandler');
-const errorUtils = require('../utils/error');
+const commonErrorHandler = require('@core/commonErrorHandler');
+const errorUtils = require('@root/utils/error');
 
 function _initialize_() {
   let app = express();
 
   app.use(cors());
-  app.use(bodyParser.urlencoded({extended: true}));
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
 
   commonErrorHandler.attachWithApp(app);

@@ -1,6 +1,6 @@
 const statusCodes = require('http-status-codes');
 
-const logger = require('./logger');
+const logger = require('@core/logger');
 
 /**
  * Takes care of any uncaught error that was not handled specifically for

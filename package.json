@@ -10,7 +10,7 @@
     "@root": "server",
     "@core": "server/core",
     "@api": "server/api",
-    "@config": "server/config"
+    "@config": "config/"
   },
   "scripts": {
     "start": "DEBUG=simpleNodeServer node index.js",
