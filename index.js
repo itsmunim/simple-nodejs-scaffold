@@ -1,4 +1,3 @@
-
 const server = require('./server');
 
 function options() {
