@@ -1,19 +1,21 @@
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 
-const commonErrorHandler = require('@core/commonErrorHandler');
 const errorUtils = require('@root/utils/error');
+const logger = require('@core/logger');
 
+/**
+ * Creates a barebone express app with basic setup.
+ */
 function _initialize_() {
   let app = express();
 
   app.use(cors());
   app.use(bodyParser.urlencoded({ extended: true }));
   app.use(bodyParser.json());
-
-  commonErrorHandler.attachWithApp(app);
 
   return app;
 }
@@ -31,6 +33,9 @@ function _initialize_() {
  * client
  * - index.html
  * - dist(or static or resources)/
+ * - ...
+ *
+ * If the `clientPath` is not given, returns a basic express app instance.
  * ```
  * @returns {Function}
  */
@@ -39,15 +44,19 @@ function initiate(clientPath) {
   let app = _initialize_();
 
   if (clientPath) {
-    let staticPaths = ['dist', 'resources', 'static'];
+    if (fs.existsSync(clientPath)) {
+      let staticPaths = ['dist', 'resources', 'static'];
 
-    staticPaths.forEach((staticPath) => {
-      app.use(express.static(path.resolve(clientPath, staticPath)));
-    });
+      staticPaths.forEach((staticPath) => {
+        app.use(express.static(path.resolve(clientPath, staticPath)));
+      });
 
-    app.get('/', function (req, res) {
-      res.sendFile(path.resolve(clientPath, 'index.html'));
-    });
+      app.get('/', function (req, res) {
+        res.sendFile(path.resolve(clientPath, 'index.html'));
+      });
+    } else {
+      logger.log('invalid client folder path; try absolute path or make sure it exists');
+    }
   }
 
   return app;
@@ -61,13 +70,14 @@ function initiate(clientPath) {
 function initiateWithIndexAndStaticDir(indexPath, staticDirPath) {
   let app = _initialize_();
 
-  if (indexPath && staticDirPath) {
+  if (indexPath && staticDirPath && fs.existsSync(indexPath) && fs.existsSync(staticDirPath)) {
     app.use(express.static(staticDirPath));
     app.get('/', function (req, res) {
       res.sendFile(indexPath);
     });
   } else {
-    errorUtils.throwError('index path and static dir need to be given')
+    errorUtils.throwError('index path and/or static dir path is invalid or make sure they exist');
+    return;
   }
 
   return app;
