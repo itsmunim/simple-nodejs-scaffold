@@ -1,21 +1,36 @@
-### Simple Node Server
+<div align="center">
+  <h1>
+    🦥Simple Node Server 🦥
+  </h1>
+</div>
 
-A simple enough node server scaffolding to get you started on your project immediately
+<p align="center">
+  Simple enough service scaffolding in node and express; to get you started on your project immediately- with right folder structure and architecture practices in place 🦦
+</p>
 
 
-#### Features
+## Table of Contents
+
+- [Features](#features)
+- [Usage](#usage)
+- [Serving Frontend](#serving-frontend)
+- [Structure](#structure)
+- [Adding API Resource](#adding-api-resource)
+- [Others](#others)
+
+## Features
 
 - Don't worry about the boilerplate anymore, jump right into writing your API
 resources
 
-- Serve your frontend easily by providing the absolute path
+- Easily start serving your frontend
 
 - Have error handling and graceful shutdown support out of the box
 
-- Structure your code in more maintainable and industry standard way
+- Structure your code in a domain driven approach- with right architectural practices in place
 
 
-#### Running the Project
+## Usage
 
 - `npm install`
 
@@ -23,9 +38,10 @@ resources
 
 - To run in different port: `PORT=8000 npm start`
 
-#### Serving a Client/Frontend 
 
-- If your client app has following structure
+## Serving Frontend 
+
+- If your frontend dir has following structure
 
 ``` 
 client/
@@ -33,7 +49,7 @@ client/
 | - resources/ <-- or may be static/ or dist/
 ```
 
-then this can easily be served using 
+then this can easily be served using-
 
 ```
 CLIENT_DIR=<absolute path of your client app folder> npm start
@@ -46,8 +62,9 @@ the following might be your option-
 INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> npm start
 ```
 
+## Structure
 
-#### The Structure
+P.S. The addition of new cli command explained in next section will make your life easy- as adding a new api resource is just one command away! And it automatically generates the proper structure.
 
 ``` 
 index.js <-- entry point for node
@@ -65,11 +82,11 @@ server <-- root folder for all functionalities
   
   | - <resource>
     | - route.js <-- specific routing for this resource e.g. /user/all, /user/auth etc.
-    | - controller.js <-- controller for this resource, business and db access logics should
-    reside here. Feel free to split up db access layer into a repository if you want
-    | - repository.js <-- if you separate out db access codes from controller.js
-    | - model.js <-- if this resource needs a model schema to be specified
-    | - index.js <-- entry point for model, controller, repository and route for this resource
+    | - controller.js <-- controller for this resource; uses services, controls api flow
+    | - service.js <-- business logics reside here; uses repositories to access persistance layer
+    | - repository.js <-- persistance layer access manager; all orm/db integrations should happen in this layer- single point to plugin/get rid of different integrations 
+    | - model.js <-- if this resource needs a db model schema to be specified
+    | - index.js <-- entry point for model, controller, service, route etc. for this resource
     | - test
       | - <type>.test.js <-- tests for this resource; type can be model, repository, controller
       etc. For each there should be one separate test file
@@ -78,21 +95,45 @@ server <-- root folder for all functionalities
   | - ...    
 ```
 
-#### Exposing a new API Resource
+## Adding API Resource
 
-- Create the resource folder under `server/api` (e.g. `user`)
+Using the new cli tool bundled in this scaffold, adding a new api resource can be as easy as doing- `npm run gen-resource <resource-name-in-kebabcase>`
+
+Example- `npm run gen-resource order-items`
+
+Please read the comments generated with the files to better understand the architecture and patterns involved.
+
+If you still want to do it manually, then follow the instructions below-
+
+- Create the resource folder under `server/api` (e.g. `users`)
 
 - Create `route.js`, this will have routing definitions for all the endpoints 
-under this resource (e.g. `user/all`, `user/2/profile`)
+under this resource (e.g. `users/`, `users/2/profile`)
 
-- Create `controller.js`; theoretically this is where you should put business and db
-access logic for your resource
+- Create `controller.js`; theoretically this is where you should use different services to cater your api flow
+
+- Create `service.js`; this is where you should use different db repositories to cater business logic
 
 - You can separate out your db access logic from controller and put them in a separate
-file called `repository.js`; controller will use it to get/manipulate db records
+file called `repository.js`; services will use it to get/manipulate db records
 
-- Optionally you can have a `model.js`; which refers to the model required for this
+- You can have a `model.js` if required; which refers to the db schema required for this
 resource
+
+- If same resource require multiple models, services etc. they should be grouped under a subfolder like models, services etc. 
+
+Example: for order management api resource, this can be a scenario-
+
+```
+orders/
+  models/
+  - order.js
+  - order-item.js
+
+  services/
+  - checkout.js
+  - payment.js
+```
 
 - Create an index file and register all these under the `index.js`
 
@@ -105,21 +146,23 @@ module.exports = {
 };
 ```
 
-- Finally register your api to the base api routing at `server/api/index.js`
+- Ideally, only route should be exposed
+
+- Finally register your resource in api index routing at `server/api/index.js`
 
 ``` 
-const yourResource = require('./yourResource');
+const yourresource = require('./your-resource');
 
 ...
-router.use('/yourResource', yourResource.route);
+router.use('/your-resource', yourresource.route);
 
 module.exports = router;
 ```
 
-- To know more, please take a look at the given sample api resource `user`
+- To know more, please take a look at the given sample api resource `user` or try generating a new resource by `npm run gen-resource resource-name`
 
 
-#### Other Important Commands
+## Others
 
 - To run tests: `npm run test`
 
