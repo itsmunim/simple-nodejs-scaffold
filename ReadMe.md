@@ -1,12 +1,13 @@
 <div align="center">
   <h1>
-    🦥Simple Node Server 🦥
+    🦥 Simple NodeJS Scaffold 🦥
   </h1>
 </div>
 
 <p align="center">
-  Simple enough service scaffolding in node and express; to get you started on your project immediately- with right folder structure and architecture practices in place 🦦
+  Simple enough service scaffolding in node and express; to get you started on your project immediately- with right folder structure and architecture practices in place 🤟🏼
 </p>
+
 
 
 ## Table of Contents
@@ -17,6 +18,8 @@
 - [Structure](#structure)
 - [Adding API Resource](#adding-api-resource)
 - [Others](#others)
+
+
 
 ## Features
 
@@ -30,6 +33,7 @@ resources
 - Structure your code in a domain driven approach- with right architectural practices in place
 
 
+
 ## Usage
 
 - `npm install`
@@ -37,6 +41,7 @@ resources
 - This starts the server in port `8282`: `npm start`
 
 - To run in different port: `PORT=8000 npm start`
+
 
 
 ## Serving Frontend 
@@ -61,6 +66,8 @@ the following might be your option-
 ```
 INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> npm start
 ```
+
+
 
 ## Structure
 
@@ -94,6 +101,8 @@ server <-- root folder for all functionalities
 | - testHelpers <-- test specific helpers, shared mocks, global vars should be here
   | - ...    
 ```
+
+
 
 ## Adding API Resource
 
@@ -160,6 +169,7 @@ module.exports = router;
 ```
 
 - To know more, please take a look at the given sample api resource `user` or try generating a new resource by `npm run gen-resource resource-name`
+
 
 
 ## Others
