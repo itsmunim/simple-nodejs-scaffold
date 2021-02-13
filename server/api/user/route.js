@@ -7,8 +7,8 @@ const router = express.Router({mergeParams: true});
 
 const controller = require('./controller');
 
-router.get('/:id', function (req, res) {
-  res.status(statusCodes.OK).send(controller.getUserById(req.params.id));
+router.get('/one', async function (req, res) {
+  res.status(statusCodes.OK).send(await controller.getUser());
 });
 
 module.exports = router;

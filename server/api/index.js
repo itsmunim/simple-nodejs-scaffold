@@ -8,7 +8,7 @@ const user = require('./user');
 // api resources, this works as place to require new routes.
 /** --route:import-- */
 
-router.use('/user', user.route);
+router.use(user.config.ENDPOINT, user.route);
 // do not remove the --route-- placeholder, if you use the cli to generate
 // api resources, this works as hook to attach new routes.
 /** --route-- */
