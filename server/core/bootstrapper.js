@@ -1,4 +1,3 @@
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const fs = require('fs');
@@ -14,8 +13,11 @@ function _initialize_() {
   let app = express();
 
   app.use(cors());
-  app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(bodyParser.json());
+  app.use(express.json());
+
+  app.get('/health', (req, res) => {
+    res.status(200).send({ message: 'Up and running' });
+  });
 
   return app;
 }

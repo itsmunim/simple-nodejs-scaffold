@@ -1,4 +1,5 @@
 const logger = require('@core/logger');
+const config = require('@config');
 
 /**
  * A basic shutdown manager for the node backend. In case of any emergencies,
@@ -25,12 +26,14 @@ function manage(server) {
       connections.forEach((curr) => {
         curr.destroy();
       });
-    }, 5000);
+    }, config.CONNECTION_CLOSING_TIME);
 
     setTimeout(() => {
-      logger.log('Could not close connections in time, forcefully shutting down');
+      logger.log(
+        'Could not close connections in time, forcefully shutting down'
+      );
       process.exit(1);
-    }, 10000);
+    }, config.WAIT_TIME_BEFORE_FORCE_SHUTDOWN);
   };
 
   process.on('SIGTERM', shutDown);
