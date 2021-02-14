@@ -15,8 +15,8 @@
 - [Features](#features)
 - [Usage](#usage)
 - [Serving Frontend](#serving-frontend)
-- [Structure](#structure)
-- [Adding API Resource](#adding-api-resource)
+- [Folder Structure](#folder-structure)
+- [Adding new API Resource](#adding-new-api-resource)
 - [Others](#others)
 
 
@@ -26,14 +26,11 @@
 - Don't worry about the boilerplate anymore, jump right into writing your API
 resources
 
-- Easily start serving your frontend
+- Easily start serving your frontend; great option to create a BFF right away
 
 - Have error handling and graceful shutdown support out of the box
 
 - Structure your code in a domain driven approach- with right architectural practices in place
-
-
-
 ## Usage
 
 - `npm install`
@@ -41,8 +38,6 @@ resources
 - This starts the server in port `8282`: `npm start`
 
 - To run in different port: `PORT=8000 npm start`
-
-
 
 ## Serving Frontend 
 
@@ -57,60 +52,55 @@ client/
 then this can easily be served using-
 
 ```
-CLIENT_DIR=<absolute path of your client app folder> npm start
+CLIENT_DIR=<absolute path of your client dir> npm start
 ```
 
-- If your `index.html` file is at one place and folder with static files in another, then
-the following might be your option-
+- If your `index.html` file is at one place and folder with static files in another, then the following might be your option-
 
 ```
 INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> npm start
 ```
+## Folder Structure
 
+At the root of this directory, the `index.js` works as the entrypoint for this service. It hooks up with certain modules under `server` dir and makes the service up and running when you hit- `npm start`.
 
-
-## Structure
-
-P.S. The addition of new cli command explained in next section will make your life easy- as adding a new api resource is just one command away! And it automatically generates the proper structure.
+This is how the `server` dir is structured at this moment:
 
 ``` 
-index.js <-- entry point for node
-server <-- root folder for all functionalities
-| - core <-- all the core functionalities belong here 
-  | - shutdownManager.js 
-  | - bootstrapper.js
-  | - ...
-  
-| - config <-- all server specific config resides here
-  | - index.js
-  
-| - api <-- all the api resources belong here
-  | - index.js <-- any new api resource is registered here
-  
-  | - <resource>
-    | - route.js <-- specific routing for this resource e.g. /user/all, /user/auth etc.
-    | - controller.js <-- controller for this resource; uses services, controls api flow
-    | - service.js <-- business logics reside here; uses repositories to access persistance layer
-    | - repository.js <-- persistance layer access manager; all orm/db integrations should happen in this layer- single point to plugin/get rid of different integrations 
-    | - model.js <-- if this resource needs a db model schema to be specified
-    | - index.js <-- entry point for model, controller, service, route etc. for this resource
-    | - test
-      | - <type>.test.js <-- tests for this resource; type can be model, repository, controller
-      etc. For each there should be one separate test file
-      
-| - testHelpers <-- test specific helpers, shared mocks, global vars should be here
-  | - ...    
+.
+├── api (all the api resources are here)
+│   ├── user
+│   │   ├── test
+│   │   │   └── controller.test.js
+│   │   ├── config.js
+│   │   ├── controller.js
+│   │   ├── index.js
+│   │   └── route.js
+│   └── index.js
+├── core (all the core functionalities of the service is bundled here)
+│   ├── bootstrapper.js
+│   ├── commonErrorHandler.js
+│   ├── logger.js
+│   └── shutdownManager.js
+├── testHelpers (test specific helpers, global vars should be here)
+│   └── globals.js
+├── utils (any utils or common helpers should be here)
+│   └── error.js
+└── index.js    
 ```
+## Adding new API resource
 
+### CLI
 
+Using the new cli tool bundled in this scaffold, adding a new api resource can be as easy as doing- 
 
-## Adding API Resource
+`npm run add-resource <resource-name-in-kebabcase>`
 
-Using the new cli tool bundled in this scaffold, adding a new api resource can be as easy as doing- `npm run gen-resource <resource-name-in-kebabcase>`
-
-Example- `npm run gen-resource order-items`
+Example- `npm run add-resource order-items`
 
 Please read the comments generated with the files to better understand the architecture and patterns involved.
+
+### Manual
 
 If you still want to do it manually, then follow the instructions below-
 
@@ -123,54 +113,57 @@ under this resource (e.g. `users/`, `users/2/profile`)
 
 - Create `service.js`; this is where you should use different db repositories to cater business logic
 
-- You can separate out your db access logic from controller and put them in a separate
-file called `repository.js`; services will use it to get/manipulate db records
+- You should separate out your db access logic from services and put them in a separate file called `repository.js`; services will use it to get/manipulate db records
 
-- You can have a `model.js` if required; which refers to the db schema required for this
-resource
+- You can have a `model.js` if required; which refers to the db schema required for this resource
 
 - If same resource require multiple models, services etc. they should be grouped under a subfolder like models, services etc. 
 
-Example: for order management api resource, this can be a scenario-
+    Example: for order management api resource, this can be a scenario-
 
-```
-orders/
-  models/
-  - order.js
-  - order-item.js
+    ```
+    orders/
+      models/
+      - order.js
+      - order-item.js
 
-  services/
-  - checkout.js
-  - payment.js
-```
+      services/
+      - checkout.js
+      - payment.js
+    ```
 
-- Create an index file and register all these under the `index.js`
+- Now, create a `config.js` where you should have your endpoint defined, at least-
 
-``` 
-module.exports = {
-  route: ...
-  controller: ...
-  model: ...
-  repository: ...
-};
-```
+    ```
+    const config = {
+      ENDPOINT: '/order-items',
+    };
 
-- Ideally, only route should be exposed
+    module.exports = config;
+    ```
+
+- Create an index file(`index.js`) and register the `route` and `config` to expose-
+
+    ``` 
+    module.exports = {
+      route: require('./route'),
+      config: require('./config'),
+    };
+    ```
 
 - Finally register your resource in api index routing at `server/api/index.js`
 
-``` 
-const yourresource = require('./your-resource');
+    ``` 
+    const orderItems = require('./order-items');
 
-...
-router.use('/your-resource', yourresource.route);
+    ...
+    router.use(orderItems.config.ENDPOINT, orderItems.route);
 
-module.exports = router;
-```
-
-- To know more, please take a look at the given sample api resource `user` or try generating a new resource by `npm run gen-resource resource-name`
+    module.exports = router;
+    ```
 
 
+> To know more, please take a look at the given sample api resource `user` or try generating a new resource by `npm run add-resource resource-name`
 
 ## Others
 
