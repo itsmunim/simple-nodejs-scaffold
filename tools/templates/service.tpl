@@ -27,4 +27,7 @@
  *  - notification.service.js
  */
 
-module.exports = {};
+class Service {
+}
+
+module.exports = Service;

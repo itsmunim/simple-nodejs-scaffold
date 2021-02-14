@@ -13,6 +13,5 @@
  * models
  *  - order.item.js
  *  - order.js
- *  - customer.js
  */
 module.exports = {};

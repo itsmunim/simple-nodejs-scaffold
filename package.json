@@ -16,7 +16,7 @@
     "start": "DEBUG=simpleNodeServer node index.js",
     "test": "mocha -r server/testHelpers/globals.js server/**/*.test.js",
     "lint": "eslint server/",
-    "gen-resource": "node ./tools/cli.js"
+    "add-resource": "node ./tools/cli.js"
   },
   "keywords": [
     "node",

@@ -15,9 +15,12 @@ const baseTplDirPath = path.resolve(__dirname, '../templates');
  */
 function renderIndexFile(apiIndexPath, resourceFolderName, resourcePrefix) {
   const content = fs.readFileSync(apiIndexPath, 'utf8');
-  const normalisedName = resourceFolderName.replace(/-/g, '');
+  const normalisedName = resourceFolderName.replace(
+    /-([a-zA-Z])/g,
+    (m) => m[1] && m[1].toUpperCase()
+  );
   const importLine = `const ${normalisedName} = require('./${resourceFolderName}');\n/** --route:import-- */`;
-  const hookLine = `router.use('/${resourcePrefix}', ${normalisedName}.route);\n/** --route-- */`;
+  const hookLine = `router.use(${normalisedName}.config.ENDPOINT, ${normalisedName}.route);\n/** --route-- */`;
 
   return content
     .replace('/** --route:import-- */', importLine)
