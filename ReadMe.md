@@ -31,35 +31,72 @@ resources
 - Have error handling and graceful shutdown support out of the box
 
 - Structure your code in a domain driven approach- with right architectural practices in place
+
+- Has `mongo` connectivity built-in, simply define schemas and start writing stateful APIs
+
+- Dockerized
 ## Usage
+
+### Without Docker
 
 - `npm install`
 
-- This starts the server in port `8282`: `npm start`
+- If you need `mongo` connectivity, run `mongo` in local and create an `.env` file with following content:
+    ```
+    MONGO_USERNAME=local-mongo-user-name
+    MONGO_PASSWORD=local-mongo-user-pword
+    MONGO_PORT=27017
+    MONGO_DB=mongo-db-name
+    ```
+
+- Then, this will start the server in port `8282`: `npm start`
 
 - To run in different port: `PORT=8000 npm start`
 
+### With Docker
+
+- Make sure you have created an `.env` file stated above
+
+- This will run the service at `8282` port with `mongo` connectivity by default:
+
+    `docker-compose build && docker-compose up -d`
+
+- To check logs: `docker-compose logs`
+
+- To shutdown: `docker-compose down`
+
 ## Serving Frontend 
 
-- If your frontend dir has following structure
+### Without Docker
 
-``` 
-client/
-| - index.html
-| - resources/ <-- or may be static/ or dist/
-```
+If your frontend dir has following structure
+  ``` 
+  client/
+  | - index.html
+  | - resources/ <-- or may be static/ or dist/
+  ```
 
-then this can easily be served using-
+Then, this can easily be served using-
+  ```
+  CLIENT_DIR=<absolute path of your client dir> npm start
+  ```
 
-```
-CLIENT_DIR=<absolute path of your client dir> npm start
-```
+If your `index.html` file is at one place and folder with static files in another, then the following might be your option-
+  ```
+  INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> npm start
+  ```
+### With Docker
 
-- If your `index.html` file is at one place and folder with static files in another, then the following might be your option-
-
-```
-INDEX=<absolute path of index.html> STATIC_DIR=<absolute path of static folder> npm start
-```
+In the `.env` file add following value to serve from a client app:
+  ```
+  CLIENT_DIR=<absolute path of your client dir>
+  ```
+  
+Or, to serve index and static files separately like stated in `Without Docker` section:
+  ```
+  INDEX=<absolute path of index.html>
+  STATIC_DIR=<absolute path of static folder>
+  ```
 ## Folder Structure
 
 At the root of this directory, the `index.js` works as the entrypoint for this service. It hooks up with certain modules under `server` dir and makes the service up and running when you hit- `npm start`.
