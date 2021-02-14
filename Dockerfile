@@ -7,4 +7,3 @@ RUN apk add --no-cache bash
 WORKDIR $SERVICE_HOME
 COPY . .
 RUN npm ci --production
-CMD ["bash", "startup.sh"]

@@ -17,6 +17,7 @@ async function connectMongoDb() {
     reconnectTries: Number.MAX_VALUE,
     reconnectInterval: 500,
     connectTimeoutMS: 10000,
+    useUnifiedTopology: true,
   };
 
   try {
