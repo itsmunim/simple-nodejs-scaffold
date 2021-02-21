@@ -5,7 +5,7 @@ require('module-alias/register');
 const apiRoute = require('@api');
 const bootstrapper = require('@core/bootstrapper');
 const commonErrorHandler = require('@core/commonErrorHandler');
-const connManager = require('@core/connectionManager');
+const connectors = require('@core/connectors');
 const config = require('@config');
 const shutDownManager = require('@core/shutdownManager');
 const logger = require('@core/logger');
@@ -19,7 +19,7 @@ async function start(options) {
   options = options || {};
   const port = options.port || config.DEFAULT_PORT;
   const app = _createApp(options);
-  await _initializeDependentConnections();
+  await connectors.connectAll();
   return app.listen(port, function () {
     logger.log(`server started on port ${port}`);
   });
@@ -61,16 +61,6 @@ function _createApp(options) {
 
   return app;
 }
-
-/**
- * All connections to database instance, redis instance etc.
- * should be done inside this function.
- */
-async function _initializeDependentConnections() {
-  await connManager.connectMongoDb();
-  // the other connections to be made, should follow here
-}
-
 
 module.exports = {
   autoManageShutdown,

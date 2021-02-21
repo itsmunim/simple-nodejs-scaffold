@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const logger = require('@core/logger');
 
-async function connectMongoDb() {
+async function connect() {
   const {
     MONGO_USERNAME,
     MONGO_PASSWORD,
@@ -14,8 +14,6 @@ async function connectMongoDb() {
 
   const options = {
     useNewUrlParser: true,
-    reconnectTries: Number.MAX_VALUE,
-    reconnectInterval: 500,
     connectTimeoutMS: 10000,
     useUnifiedTopology: true,
   };
@@ -24,10 +22,11 @@ async function connectMongoDb() {
     await mongoose.connect(url, options);
     logger.log('mongo db is connected');
   } catch (ex) {
-    logger.log('mongo db connection failed', ex);
+    logger.log('mongo db connection failed');
+    return Promise.reject(ex);
   }
 }
 
 module.exports = {
-  connectMongoDb,
+  connect,
 };
