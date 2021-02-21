@@ -1,26 +1,58 @@
 version: '3.9'
 
+# If you want to use mysql instead of mongodb, please move the entire mysql
+# block from below under `services`. You should then uncomment the
+# mysql related env vars in app_svc environment section. Do not forget
+# to uncomment mysql-data under volumes.
+x-disabled:
+  mysql:
+    container_name: mysql
+    image: mysql:5.7
+    restart: always
+    environment:
+      - MYSQL_DATABASE=$DB_NAME
+      # Uncomment following line, if root user does not have a
+      # password. And remove MYSQL_ROOT_PASSWORD
+      # - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PWORD
+      # Uncomment next lines if you have a different user
+      # than root.
+      # - MYSQL_USER=$MYSQL_USER
+      # - MYSQL_PASSWORD=$MYSQL_PWORD
+    ports:
+      - $MYSQL_HOST_PORT:$MYSQL_PORT
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - svc-network
+
 services:
   build_image:
     build: .
     image: services/sns:${VERSION} # use your own image name e.g. rancher/my-app:{VERSION}
+  
   app_svc:
     container_name: sns-service
     image: services/sns:${VERSION}
     depends_on: [build_image]
-    restart: unless-stopped
-    env_file: .env
+    restart: on-failure
     environment:
       - MONGO_USERNAME=$MONGO_USERNAME
       - MONGO_PASSWORD=$MONGO_PASSWORD
       - MONGO_HOSTNAME=mongo
       - MONGO_PORT=$MONGO_PORT
-      - MONGO_DB=$MONGO_DB
+      - MONGO_DB=$DB_NAME
+      # Uncomment if you are using mysql
+      # - MYSQL_DB=$DB_NAME
+      # - MYSQL_HOSTNAME=mysql
+      # - MYSQL_USER=$MYSQL_ROOT_USER # feel free to use a different user
+      # - MYSQL_PASSWORD=$MYSQL_ROOT_PWORD
+      # - MYSQL_PORT=$MYSQL_PORT
     ports:
-      - 8282:8282
+      - $SVC_HOST_PORT:8282
     networks:
       - svc-network
-    command: scripts/wait-for.sh mongo:27017 -- bash scripts/startup.sh
+    command: bash scripts/startup.sh
   
   mongo:
     container_name: mongo
@@ -29,11 +61,11 @@ services:
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$MONGO_USERNAME
       - MONGO_INITDB_ROOT_PASSWORD=$MONGO_PASSWORD
-      - MONGO_INITDB_DATABASE=$MONGO_DB
+      - MONGO_INITDB_DATABASE=$DB_NAME
     ports:
-      - 27020:27017
+      - $MONGO_HOST_PORT:$MONGO_PORT
     volumes:
-      - dbdata:/data/db
+      - mongo-data:/data/db
     networks:
       - svc-network
 
@@ -42,4 +74,5 @@ networks:
     driver: bridge
 
 volumes:
-  dbdata:
+  mongo-data:
+  # mysql-data: # uncomment if using mysql

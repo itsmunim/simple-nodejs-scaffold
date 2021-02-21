@@ -41,21 +41,42 @@ resources
 
 - `npm install`
 
-- If you need `mongo` connectivity, run `mongo` in local and create an `.env` file with following content:
+- Create a `.env` file using the following content, feel free to change username and password as you please:
+
     ```
-    MONGO_USERNAME=local-mongo-user-name
-    MONGO_PASSWORD=local-mongo-user-pword
+    # COMMON
+    DB_NAME=sns-db
+
+    # SERVICE
+    VERSION=1.0.0
+    SVC_HOST_PORT=8282
+
+    # MONGO_DB
+    MONGO_USERNAME=sns-user
+    MONGO_PASSWORD=sns-012345
     MONGO_PORT=27017
-    MONGO_DB=mongo-db-name
+
+    # To expose it in host network as well, please specify a port below. Change it to
+    # any other ports, if the port is already in use in host.
+    MONGO_HOST_PORT=27018
+
+    # MYSQL
+    MYSQL_ROOT_USER=root
+    MYSQL_ROOT_PWORD=root12345 # you can remove this if MYSQL_ALLOW_EMPTY_PASSWORD is set in docker-compose
+    MYSQL_PORT=3306
+
+    # To expose it in host network as well, please specify a port below. Change it to
+    # any other ports, if the port is already in use in host.
+    MYSQL_HOST_PORT=3307
     ```
 
-- Then, this will start the server in port `8282`: `npm start`
+- Make sure if you have your local `mongo` running. Then, this will start the server in port `8282`: `npm start`
 
-- To run in different port: `PORT=8000 npm start`
+- To use `mysql`, make sure you have local mysql running with the above setup in `.env` file. Then in `server/core/connectors/index.js` comment out or remove the `mysql` option from ignore list and add `mongo` instead
 
 ### With Docker
 
-- Make sure you have created an `.env` file stated above
+- Make sure you have created an `.env` file stated above with same content
 
 - This will run the service at `8282` port with `mongo` connectivity by default:
 
@@ -64,6 +85,8 @@ resources
 - To check logs: `docker-compose logs`
 
 - To shutdown: `docker-compose down`
+
+- To use `mysql` instead, check the `docker-compose` file and follow the instructions given in comments. Finally, do not forget to make the changes in `server/core/connectors/index.js` as described above and run `docker-compose build` once
 
 ## Serving Frontend 
 
