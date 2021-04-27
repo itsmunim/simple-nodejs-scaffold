@@ -45,7 +45,7 @@
     "module-alias": "^2.2.2",
     "mongoose": "^5.11.16",
     "mysql2": "^2.2.5",
-    "redis": "^3.0.2",
+    "redis": "^3.1.1",
     "sequelize": "^6.5.0"
   },
   "devDependencies": {
